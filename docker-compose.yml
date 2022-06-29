@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  app:
+    container_name: express-server
+    hostname: express-server
+    build: .
+    command: npm start
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/user/app
+
+  db:
+    container_name: mysqlDB
+    hostname: mysqlDB
+    image: mysql
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --innodb_force_recovery=0
+    volumes: 
+      - ./database/sql:/docker-entrypoint-initdb.d/
+      - ./database/data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: mydb13
+      MYSQL_DATABASE: testDB
+      TZ: America/Sao_Paulo
